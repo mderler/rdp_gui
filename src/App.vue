@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import InputBar from './components/InputBar.vue'
-import ValuesDisplay from './components/ValuesDisplay.vue'
-import TypesDisplay from './components/TypesDisplay.vue'
-import DeviceDisplayVue from './components/DeviceDisplay.vue'
 import { CommandFactory } from './commands/command.factory'
+import DeviceDisplay from './components/DeviceDisplay.vue'
+import InputBar from './components/InputBar.vue'
+import RoomsDisplay from './components/RoomsDisplay.vue'
+import TypesDisplay from './components/TypesDisplay.vue'
+import ValuesDisplay from './components/ValuesDisplay.vue'
 
-import { useValueStore } from './stores/value.store'
+import { useRoomStore } from './stores/room.store'
 import { useValueTypeStore } from './stores/value-type.store'
+import { useValueStore } from './stores/value.store'
 
-import type { UrlParams } from './types/url-paras.type'
+import RoomGroupsDisplay from './components/RoomGroupsDisplay.vue'
 import { useDeviceStore } from './stores/device.store'
+import type { UrlParams } from './types/url-paras.type'
 </script>
 
 <script lang="ts">
@@ -18,6 +21,8 @@ export default {
     const valueStore = useValueStore()
     const valueTypeStore = useValueTypeStore()
     const deviceStore = useDeviceStore()
+    const roomStore = useRoomStore()
+
     const params: UrlParams = {}
     const commandFactory = new CommandFactory(params)
     return {
@@ -25,13 +30,15 @@ export default {
       commandFactory,
       valueStore,
       valueTypeStore,
-      deviceStore
+      deviceStore,
+      roomStore
     }
   },
   mounted() {
     this.valueTypeStore.updateValueTypes()
     this.valueStore.updateValues()
     this.deviceStore.updateDevices()
+    this.roomStore.updateRooms()
   },
   methods: {
     update_search(args: string[]) {
@@ -64,7 +71,16 @@ export default {
       :value_types="valueTypeStore.valueTypes"
       @update_type="valueTypeStore.updateValueTypes"
     />
-    <DeviceDisplayVue :devices="deviceStore.devices" @update_device="deviceStore.updateDevices"/>
-    <ValuesDisplay :values="valueStore.values" :value_types="valueTypeStore.valueTypes" :devices="deviceStore.devices" />
+    <DeviceDisplay :devices="deviceStore.devices" @update_device="deviceStore.updateDevices" />
+    <RoomsDisplay :rooms="roomStore.rooms" @update_room="roomStore.updateRooms" />
+    <RoomGroupsDisplay
+      :room-groups="roomStore.roomGroups"
+      @update_room_group="roomStore.updateRooms"
+    />
+    <ValuesDisplay
+      :values="valueStore.values"
+      :value_types="valueTypeStore.valueTypes"
+      :devices="deviceStore.devices"
+    />
   </div>
 </template>

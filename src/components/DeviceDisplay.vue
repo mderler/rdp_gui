@@ -1,14 +1,17 @@
 <script lang="ts">
 import axios from 'axios'
 
-import SingleDeviceDisplay from './SingleDeviceDisplay.vue'
 import { Device } from '@/scripts/device'
+import { useRoomStore } from '@/stores/room.store'
+import ItemSelect from './ItemSelect.vue'
+import SingleDeviceDisplay from './SingleDeviceDisplay.vue'
 export default {
   props: ['devices'],
   data() {
     return {
       newDevice: new Device(),
-      editor_hidden: true
+      editor_hidden: true,
+      roomStore: useRoomStore()
     }
   },
   methods: {
@@ -17,13 +20,13 @@ export default {
     },
     add_device() {
       console.log('add device', this.newDevice)
-      axios.put('/api/device/0/', this.newDevice).then((result) => {
+      axios.post('/api/device/', this.newDevice).then((result) => {
         console.log(result)
         this.$emit('update_device')
       })
     }
   },
-  components: { SingleDeviceDisplay },
+  components: { SingleDeviceDisplay, ItemSelect },
   emits: ['update_device']
 }
 </script>
@@ -49,6 +52,12 @@ export default {
     <div class="row rounded mt-1 mb-0 p-0">
       <input class="col bg-secondary rounded me-1" v-model="newDevice.name" />
       <input class="col bg-secondary rounded" v-model="newDevice.device" />
+      <ItemSelect
+        :items="roomStore.rooms.map((room) => ({ value: room.id, name: room.name }))"
+        null-text="NULL"
+        v-model:item="newDevice.room_id"
+        class="col bg-secondary rounded"
+      />
       <button class="col bg-primary text-end rounded mb-1" v-on:click="add_device">submit</button>
     </div>
   </span>

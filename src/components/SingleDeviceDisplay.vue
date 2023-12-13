@@ -1,13 +1,16 @@
 <script lang="ts">
 import { Device } from '@/scripts/device'
+import { useRoomStore } from '@/stores/room.store'
 import axios from 'axios'
+import ItemSelect from './ItemSelect.vue'
 
 export default {
   props: ['deviceProp'],
   data() {
     return {
       editDevice: new Device(),
-      changed: false
+      changed: false,
+      roomStore: useRoomStore()
     }
   },
   mounted() {
@@ -15,23 +18,25 @@ export default {
     this.editDevice.id = this.deviceProp.id
     this.editDevice.device = this.deviceProp.device
     this.editDevice.name = this.deviceProp.name
+    this.editDevice.room_id = this.deviceProp.room_id
   },
   methods: {
     update_changed() {
       this.changed =
-        this.deviceProp.device != this.editDevice.device ||
-        this.deviceProp.name != this.editDevice.name
+        this.deviceProp.device !== this.editDevice.device ||
+        this.deviceProp.name !== this.editDevice.name ||
+        this.deviceProp.room_id !== this.editDevice.room_id
       console.log('Changed is now', this.changed)
     },
     update_device() {
-      console.log('asd', this.editDevice)
       axios.put('/api/device/' + this.editDevice.id + '/', this.editDevice).then((result) => {
-        console.log("asdasd")
+        console.log(result)
         this.$emit('update_device')
       })
     }
   },
-  emits: ['update_device']
+  emits: ['update_device'],
+  components: { ItemSelect }
 }
 </script>
 
@@ -46,6 +51,13 @@ export default {
       class="col bg-secondary rounded"
       v-model="editDevice.device"
       v-on:change="update_changed"
+    />
+    <ItemSelect
+      :items="roomStore.rooms.map((room) => ({ value: room.id, name: room.name }))"
+      null-text="NULL"
+      v-model:item="editDevice.room_id"
+      @update:item="update_changed"
+      class="col bg-secondary rounded"
     />
     <button
       class="col bg-primary text-end rounded mb-1"

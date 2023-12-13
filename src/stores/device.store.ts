@@ -1,9 +1,9 @@
 import axios from 'axios'
 
-import { ref } from 'vue'
-import { defineStore } from 'pinia'
 import type { Device } from '@/scripts/device'
 import type { UrlParams } from '@/types/url-paras.type'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 export const useDeviceStore = defineStore('device', () => {
   const devices = ref<Device[]>([])
@@ -20,8 +20,8 @@ export const useDeviceStore = defineStore('device', () => {
       })
   }
   const getDeviceId = (deviceName: string) => {
-    var return_value = ''
-    for (var i = 0; i < devices.value.length; i++) {
+    let return_value = ''
+    for (let i = 0; i < devices.value.length; i++) {
       if (devices.value[i].name.toUpperCase() == deviceName.toUpperCase()) {
         return_value = '' + devices.value[i].id
         console.log('Found matching device', devices.value[i])
