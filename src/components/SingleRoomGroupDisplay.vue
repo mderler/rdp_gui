@@ -23,11 +23,15 @@ const changed = computed(
 )
 
 const updateRoom = () => {
-  axios
-    .put(`/api/room-group/${updatedRoomGroup.value.id}/`, updatedRoomGroup.value)
-    .then((result) => {
-      emits('update_room_group')
-    })
+  axios.put(`/api/room-group/${updatedRoomGroup.value.id}/`, updatedRoomGroup.value).then(() => {
+    emits('update_room_group')
+  })
+}
+
+const deleteRoom = () => {
+  axios.delete(`/api/room-group/${updatedRoomGroup.value.id}/`).then(() => {
+    emits('update_room_group')
+  })
 }
 
 onMounted(() => {
@@ -36,6 +40,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="row rounded mt-1 mb-0 p-0">
+    <button class="col bg-secondary rounded delete-button" @click="deleteRoom">&#128465;</button>
     <input class="col bg-secondary rounded me-1" v-model="updatedRoomGroup.name" />
     <ItemSelect
       :items="roomGroups"

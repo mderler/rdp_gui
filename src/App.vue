@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import '@/assets/shared.css'
+
 import { CommandFactory } from './commands/command.factory'
 import DeviceDisplay from './components/DeviceDisplay.vue'
 import InputBar from './components/InputBar.vue'

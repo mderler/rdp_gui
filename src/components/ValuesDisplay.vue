@@ -31,6 +31,9 @@ export default {
         }
       }
       return 'XXX'
+    },
+    formatTime(time: number) {
+      
     }
   }
 }

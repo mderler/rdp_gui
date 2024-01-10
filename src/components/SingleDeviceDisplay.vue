@@ -33,6 +33,11 @@ export default {
         console.log(result)
         this.$emit('update_device')
       })
+    },
+    delete_device() {
+      axios.delete('/api/device/' + this.editDevice.id + '/').then(() => {
+        this.$emit('update_device')
+      })
     }
   },
   emits: ['update_device'],
@@ -42,6 +47,7 @@ export default {
 
 <template>
   <div class="row rounded mt-1 mb-0 p-0">
+    <button class="col bg-secondary rounded delete-button" @click="delete_device">&#128465;</button>
     <input
       class="col bg-secondary rounded me-1"
       v-model="editDevice.name"

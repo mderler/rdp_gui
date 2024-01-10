@@ -34,7 +34,7 @@ const addRoom = () => {
       v-for="room in roomGroups"
       :key="room.id"
       :room-group="room"
-      @update_room="$emit('update_room_group')"
+      @update_room_group="$emit('update_room_group')"
     />
     <span>
       <b>Add new room group:</b>

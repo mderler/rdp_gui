@@ -18,8 +18,13 @@ const changed = computed(
 )
 
 const updateRoom = () => {
-  console.log('room', updatedRoom)
-  axios.put(`/api/room/${updatedRoom.value.id}/`, updatedRoom.value).then((result) => {
+  axios.put(`/api/room/${updatedRoom.value.id}/`, updatedRoom.value).then(() => {
+    emits('update_room')
+  })
+}
+
+const deleteRoom = () => {
+  axios.delete(`/api/room/${updatedRoom.value.id}/`).then(() => {
     emits('update_room')
   })
 }
@@ -31,6 +36,7 @@ onMounted(() => {
 
 <template>
   <div class="row rounded mt-1 mb-0 p-0">
+    <button class="col bg-secondary rounded delete-button" @click="deleteRoom">&#128465;</button>
     <input class="col bg-secondary rounded me-1" v-model="updatedRoom.name" />
     <ItemSelect
       :items="
