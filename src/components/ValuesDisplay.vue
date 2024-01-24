@@ -33,7 +33,8 @@ export default {
       return 'XXX'
     },
     formatTime(time: number) {
-      
+      const date = new Date(time * 1000);
+      return date.toLocaleString("de-DE", {timeZone: "UTC", hour12: false})
     }
   }
 }
@@ -55,7 +56,7 @@ export default {
   </div>
   <div class="row bg-secondary rounded mt-1" v-for="value in values" :key="value">
     <div class="col-1">
-      {{ value.time }}
+      {{ formatTime(value.time) }}
     </div>
     <div class="col-1">
       {{ getTypeName(value) }}
