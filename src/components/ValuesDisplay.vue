@@ -1,58 +1,67 @@
 <script lang="ts">
 import { Value } from '@/scripts/value'
+import OrderDirInidcator from './OrderDirInidcator.vue'
 
 export default {
-  props: ['values', 'value_types', 'devices'],
-  setup(props) {
-    console.log(props.values)
-  },
-  emits: ['rename'],
-  methods: {
-    getTypeName(value: Value) {
-      for (var i = 0; i < this.value_types.length; i++) {
-        if (this.value_types[i].id == value.value_type_id) {
-          return this.value_types[i].type_name
-        }
-      }
-      return 'XXX'
+    props: ['values', 'value_types', 'devices', "order_field", "ascending"],
+    setup(props) {
+        console.log(props.values);
     },
-    getUnit(value: Value) {
-      for (var i = 0; i < this.value_types.length; i++) {
-        if (this.value_types[i].id == value.value_type_id) {
-          return this.value_types[i].type_unit
+    emits: ['rename', 'filter_click'],
+    methods: {
+        getTypeName(value: Value) {
+            for (var i = 0; i < this.value_types.length; i++) {
+                if (this.value_types[i].id == value.value_type_id) {
+                    return this.value_types[i].type_name;
+                }
+            }
+            return 'XXX';
+        },
+        getUnit(value: Value) {
+            for (var i = 0; i < this.value_types.length; i++) {
+                if (this.value_types[i].id == value.value_type_id) {
+                    return this.value_types[i].type_unit;
+                }
+            }
+            return 'XXX';
+        },
+        getDevice(value: Value) {
+            for (var i = 0; i < this.value_types.length; i++) {
+                if (this.devices[i].id == value.device_id) {
+                    return this.devices[i].name;
+                }
+            }
+            return 'XXX';
+        },
+        formatTime(time: number) {
+            const date = new Date(time * 1000);
+            return date.toLocaleString("de-DE", { timeZone: "UTC", hour12: false });
+        },
+        getOrderStatus(field: string) {
+            if (field === this.order_field) {
+                return this.ascending ? "up" : "down";
+            }
+            return "";
         }
-      }
-      return 'XXX'
     },
-    getDevice(value: Value) {
-      for (var i = 0; i < this.value_types.length; i++) {
-        if (this.devices[i].id == value.device_id) {
-          return this.devices[i].name
-        }
-      }
-      return 'XXX'
-    },
-    formatTime(time: number) {
-      const date = new Date(time * 1000);
-      return date.toLocaleString("de-DE", {timeZone: "UTC", hour12: false})
-    }
-  }
+    components: { OrderDirInidcator }
 }
 </script>
 
 <template>
   <div class="row bg-primary mt-2 mb-1">
     <div
-      class="col-1"
+      class="col-1 clickable"
       data-bs-toggle="tooltip"
       data-bs-placement="top"
       data-bs-title="Tooltip on top"
+      @click="$emit('filter_click', 'time')"
     >
-      time
+      time <OrderDirInidcator :dir="getOrderStatus('time')"/>
     </div>
-    <div class="col-1">type</div>
-    <div class="col">value</div>
-    <div class="col">device</div>
+    <div class="col-1 clickable" @click="$emit('filter_click', 'type')">type <OrderDirInidcator :dir="getOrderStatus('type')"/> </div>
+    <div class="col clickable" @click="$emit('filter_click', 'value')" >value <OrderDirInidcator :dir="getOrderStatus('value')"/></div>
+    <div class="col clickable" @click="$emit('filter_click', 'device')">device <OrderDirInidcator :dir="getOrderStatus('device')"/></div>
   </div>
   <div class="row bg-secondary rounded mt-1" v-for="value in values" :key="value">
     <div class="col-1">
@@ -65,3 +74,9 @@ export default {
     <div class="col">{{ getDevice(value) }}</div>
   </div>
 </template>
+
+<style scoped>
+.clickable {
+  cursor: pointer;
+}
+</style>

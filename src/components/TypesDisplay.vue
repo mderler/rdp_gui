@@ -21,8 +21,8 @@ export default {
   <div class="row bg-primary mt-1">
     <span class="col-2">Type Editor</span
     ><span class="col text-end" v-on:click="toggleEditor()">
-      <i class="bi bi-caret-down-fill" title="Show TypeEditor" v-if="editor_hidden"></i>
-      <i class="bi bi-caret-up-fill" title="Hide TypeEditor" v-else></i>
+      <img width="15" height="15" src="/triangle-down.png" v-if="editor_hidden"/>
+      <img width="15" height="15" src="/triangle-up.png" v-else/>
     </span>
   </div>
   <span v-if="!editor_hidden">

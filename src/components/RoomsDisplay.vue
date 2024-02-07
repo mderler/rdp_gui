@@ -25,8 +25,8 @@ const addRoom = () => {
   <div class="row bg-primary mt-1">
     <span class="col-2">Room Editor</span
     ><span class="col text-end" v-on:click="() => (editorHidden = !editorHidden)">
-      <i class="bi bi-caret-down-fill" title="Show TypeEditor" v-if="editorHidden"></i>
-      <i class="bi bi-caret-up-fill" title="Hide TypeEditor" v-else></i>
+      <img width="15" height="15" src="/triangle-down.png" v-if="editorHidden"/>
+      <img width="15" height="15" src="/triangle-up.png" v-else/>
     </span>
   </div>
   <span v-if="!editorHidden">

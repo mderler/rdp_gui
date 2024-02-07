@@ -27,13 +27,14 @@ export default {
 
     const params: UrlParams = {}
     const commandFactory = new CommandFactory(params)
+
     return {
       params,
       commandFactory,
       valueStore,
       valueTypeStore,
       deviceStore,
-      roomStore
+      roomStore,
     }
   },
   mounted() {
@@ -83,6 +84,9 @@ export default {
       :values="valueStore.values"
       :value_types="valueTypeStore.valueTypes"
       :devices="deviceStore.devices"
+      :order_field="valueStore.orderField"
+      :ascending="valueStore.ascending"
+      @filter_click="(col) => { valueStore.updateOrder(col); valueStore.updateValues(params) }"
     />
   </div>
 </template>
