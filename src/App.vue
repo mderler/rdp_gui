@@ -15,6 +15,7 @@ import { useValueStore } from './stores/value.store'
 import RoomGroupsDisplay from './components/RoomGroupsDisplay.vue'
 import { useDeviceStore } from './stores/device.store'
 import type { UrlParams } from './types/url-paras.type'
+import AverageDisplay from './components/AverageDisplay.vue'
 </script>
 
 <script lang="ts">
@@ -34,7 +35,7 @@ export default {
       valueStore,
       valueTypeStore,
       deviceStore,
-      roomStore,
+      roomStore
     }
   },
   mounted() {
@@ -45,6 +46,9 @@ export default {
   },
   methods: {
     update_search(args: string[]) {
+      for (const key in this.params) {
+        delete this.params[key]
+      }
       console.log('New search arguemnts', args)
       for (var i = 0; i < args.length; i++) {
         console.log('handling command', args[i])
@@ -67,6 +71,7 @@ export default {
 </script>
 
 <template>
+  <AverageDisplay :avg="valueStore.average" />
   <div class="container p-1">
     <h1 class="row">RDP</h1>
     <InputBar @search="update_search" />
@@ -86,7 +91,12 @@ export default {
       :devices="deviceStore.devices"
       :order_field="valueStore.orderField"
       :ascending="valueStore.ascending"
-      @filter_click="(col) => { valueStore.updateOrder(col); valueStore.updateValues(params) }"
+      @filter_click="
+        (col) => {
+          valueStore.updateOrder(col)
+          valueStore.updateValues(params)
+        }
+      "
     />
   </div>
 </template>
