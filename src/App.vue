@@ -87,6 +87,7 @@ export default {
     />
     <ValuesDisplay
       :values="valueStore.values"
+      :count="valueStore.count"
       :value_types="valueTypeStore.valueTypes"
       :devices="deviceStore.devices"
       :order_field="valueStore.orderField"
@@ -94,6 +95,12 @@ export default {
       @filter_click="
         (col) => {
           valueStore.updateOrder(col)
+          valueStore.updateValues(params)
+        }
+      "
+      @page_change="
+        (newPage) => {
+          valueStore.page = newPage
           valueStore.updateValues(params)
         }
       "

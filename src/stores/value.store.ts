@@ -7,6 +7,8 @@ import type { UrlParams } from '@/types/url-paras.type'
 
 export const useValueStore = defineStore('value', () => {
   const values = ref<Value[]>([])
+  const count = ref(0)
+  const page = ref(1)
   const average = ref(0)
   const orderField = ref('')
   const ascending = ref(true)
@@ -14,9 +16,12 @@ export const useValueStore = defineStore('value', () => {
     const url = '/api/value/'
     console.log('Trying to get url', url)
     axios
-      .get(url, { params: { ...params, orderfield: orderField.value, asc: ascending.value } })
+      .get(url, {
+        params: { ...params, orderfield: orderField.value, asc: ascending.value, page: page.value }
+      })
       .then((result) => {
-        values.value = result.data
+        values.value = result.data.values
+        count.value = result.data.count
       })
       .catch((error) => {
         console.error(error)
@@ -46,5 +51,5 @@ export const useValueStore = defineStore('value', () => {
     orderField.value = field
   }
 
-  return { values, updateValues, orderField, ascending, updateOrder, average }
+  return { values, count, updateValues, orderField, ascending, updateOrder, average, page }
 })
